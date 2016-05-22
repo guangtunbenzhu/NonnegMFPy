@@ -3,7 +3,7 @@ setup(
   name = 'NonnegMFPy',
   packages = ['NonnegMFPy'], # this must be the same as the name above
   version = '0.1.0',
-  description = 'Vectorized Nonnegative Matrix Factorization with heteroscedastic uncertainties and missing data'
+  description = 'Vectorized Nonnegative Matrix Factorization with heteroscedastic uncertainties and missing data',
   author = 'Guangtun Ben Zhu',
   author_email = 'guangtun.ben.zhu@gmail.com',
   url = 'https://github.com/guangtunbenzhu/NonnegMFPy', # use the URL to the github repo
