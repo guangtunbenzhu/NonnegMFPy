@@ -48,7 +48,7 @@ nmf.py
          >> New_g = nmf.NMF(X, V=V, M=New_M)
 
          Caveat: Currently you need to re-instantiate the object whenever you update
-         the weight (V), the mask (M), W, H or n_component.
+         the weight (V), the mask (M), W, H or n_components.
          At the instantiation, the code makes a copy of everything.
          For big jobs with many iterations, this could be a severe bottleneck.
          For now, I think this is a safer way.
@@ -191,7 +191,7 @@ class NMF:
         if (H is None):
             self.H = np.random.rand(self.n_components, self.X.shape[1])
         else:
-            if (H.shape != (self.n_component, self.X.shape[1])):
+            if (H.shape != (self.n_components, self.X.shape[1])):
                 raise ValueError("Initial H has wrong shape.")
             self.H = np.copy(H)
         if (np.count_nonzero(self.H<0)>0):
