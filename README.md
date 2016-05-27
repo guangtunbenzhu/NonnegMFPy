@@ -36,7 +36,8 @@ Vectorized Nonnegative Matrix Factorization with heteroscedastic uncertainties a
          >> chi2_red, time_used = g.SolveNMF()
          >> New_M = np.copy(M)
          >> New_M[np.fabs(np.sqrt(V)*(X-np.dot(g.W, g.H)))>3] = False
-         >> New_g = nmf.NMF(X, V=V, M=New_M)
+         >> New_g = nmf.NMF(X, V=V, M=New_M) 
+         >> chi2_red, time_used = New_g.SolveNMF()
 
          Caveat: Currently you need to re-instantiate the object whenever you update
          the weight (V), the mask (M), W, H or n_component.
@@ -62,26 +63,41 @@ Vectorized Nonnegative Matrix Factorization with heteroscedastic uncertainties a
 
     Test data
     ----------
-    TBA
+    
+    One can use the following dataset as a test:
+      http://www.pha.jhu.edu/~gz323/scp/Data/ExtragalacticTest/
+    
+    The Extragalatic_Archetype_testsample_spec.fits includes spectra (spec: 2760x2820) for 2820 extragalactic sources with 2760 wavelengths 
+    and the inverse variance (ivar). 
 
 
     Run the test
     -------------
-    TBA
-    Input: 
-        -- 
-        -- 
+    Assuming you have extracted the spec and ivar matrices from the file above,
 
+   
     Instantiation: 
-        >> 
-        >> 
-        >> 
-    Run the solver: 
-        >> 
+
+     >> from NonnegMFPy import nmf
+     >> g = nmf.NMF(spec, V=ivar, n_components=5)
+
+    Factorize the data:
+     >> chi2, time_used = g.SolveNMF() # Yes, it's that simple!
+
+    If you would like to apply a mask, simply set M in the instantiation:
+     >> g = nmf.NMF(spec, V=ivar, M=mask, n_components=5) # Note False means missing datum in M
+
+    If you know W (H) already and would like to learn H (W), you can provide W_known (H_known) 
+    and set H_only (W_only) to be true for the projection mode: 
+
+     >> g = nmf.NMF(spec, V=ivar, W=W_known, n_components=5)
+     >> chi2, time_used = g.SolveNMF(H_only=True) 
+
+    Note you do need to make sure the dimensions match!
 
     Output:
-        -- 
-        -- 
+        -- The factors are stored in g.W and g.H
+        -- The cost can be retrieved with g.cost
 
 
 Dependencies
