@@ -82,6 +82,7 @@ nmf.py
 
 
 import numpy as np
+from scipy import sparse
 from time import time
 
 # Some magic numbes
@@ -150,7 +151,7 @@ class NMF:
         -- 30-Nov-2014, Started, BGT, JHU
     """
 
-    def __init__(self, X, W=None, H=None, V=None, M=None, n_components=5, maxiters=1000, tol=_smallnumber):
+    def __init__(self, X, W=None, H=None, V=None, M=None, n_components=5):
         """
         Initialization
         
@@ -159,8 +160,6 @@ class NMF:
 
         Optional Input/Output:
           -- n_components: desired size of the basis set, default 5
-          -- tol: convergence criterion, default 1E-5
-          -- maxiters: allowed maximum number of iterations, default 1000
 
           -- V: m x n matrix, the weight, (usually) the inverse variance
           -- M: m x n binary matrix, the mask, False means missing/undesired data
@@ -175,8 +174,8 @@ class NMF:
             self.X[self.X<0] = 0.
 
         self.n_components = n_components
-        self.maxiters = maxiters
-        self.tol = tol
+        self.maxiters = 1000
+        self.tol = _smallnumber
 
         if (W is None):
             self.W = np.random.rand(self.X.shape[0], self.n_components)
@@ -230,7 +229,7 @@ class NMF:
         chi2 = np.einsum('ij,ij', self.V*diff, diff)/self.V_size
         return chi2
 
-    def SolveNMF(self, W_only=False, H_only=False):
+    def SolveNMF(self, W_only=False, H_only=False, sparsemode=False, maxiters=None, tol=None):
         """
         Construct the NMF basis
 
@@ -238,15 +237,23 @@ class NMF:
             -- W_only: Only update W, assuming H is known
             -- H_only: Only update H, assuming W is known
                -- Only one of them can be set
+        Optional Input:
+            -- tol: convergence criterion, default 1E-5
+            -- maxiters: allowed maximum number of iterations, default 1000
 
         Output: 
-            -- chi2: final cost
+            -- chi2: reduced final cost
+            -- time_used: time used in this run
 
 
         """
 
         t0 = time()
 
+        if (maxiters is not None): 
+            self.maxiters = maxiters
+        if (tol is not None):
+            self.tol = tol
 
         chi2 = self.cost
         oldchi2 = _largenumber
@@ -255,22 +262,43 @@ class NMF:
             print("Both W_only and H_only are set to be True. Returning ...", flush=True)
             return (chi2, 0.)
 
-        XV = self.X*self.V
+        if (sparsemode == True):
+            V = sparse.csr_matrix(self.V)
+            VT = sparse.csr_matrix(self.V.T)
+            multiply = sparse.csr_matrix.multiply
+            dot = sparse.csr_matrix.dot
+        else:
+            V = np.copy(self.V)
+            VT = V.T
+            multiply = np.multiply
+            dot = np.dot
+
+        #XV = self.X*self.V
+        XV = multiply(V, self.X)
+        XVT = multiply(VT, self.X.T)
 
         niter = 0
 
-        while (niter<self.maxiters) and ((oldchi2-chi2)/oldchi2 > self.tol):
+        while (niter < self.maxiters) and ((oldchi2-chi2)/oldchi2 > self.tol):
 
             # Update H
             if (not W_only):
-                H_up = np.dot(self.W.T, XV)
-                H_down = np.dot(self.W.T, np.dot(self.W, self.H)*self.V)
-                self.H = self.H*H_up/H_down
+                #H_up = np.dot(self.W.T, XV)
+                #H_down = np.dot(self.W.T, np.dot(self.W, self.H)*self.V)
+
+                H_up = dot(XVT, self.W)
+                WHVT = multiply(VT, np.dot(self.W, self.H).T)
+                H_down = dot(WHVT, self.W)
+                self.H = self.H*H_up.T/H_down.T
 
             # Update W
             if (not H_only):
-                W_up = np.dot(XV, self.H.T)
-                W_down = np.dot(np.dot(self.W, self.H)*self.V, self.H.T)
+                #W_up = np.dot(XV, self.H.T)
+                #W_down = np.dot(np.dot(self.W, self.H)*self.V, self.H.T)
+
+                W_up = dot(XV, self.H.T)
+                WHV = multiply(V, np.dot(self.W, self.H))
+                W_down = dot(WHV, self.H.T)
                 self.W = self.W*W_up/W_down
 
             # chi2

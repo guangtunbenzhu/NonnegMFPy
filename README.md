@@ -52,6 +52,19 @@ Vectorized Nonnegative Matrix Factorization with heteroscedastic uncertainties a
 
          to get the other matrix (H in this case).
 
+      -- It has sparse mode. However, I found only when the matrix (M or V) is extremely sparse (>90%),
+         the speed-up is limited. The overhead of creating the intermediate sparse matrices is small though.
+         I haven't made the decision whether the sparse mode should be default.
+
+         >> chi2_red, time_used = g.SolveNMF(sparsemode=True)
+
+      -- One can also change maximum number of iterations or tolerance, e.g.,
+
+         >> chi2_red, time_used = g.SolveNMF(maxiters=5000, tol=1E-7)
+
+         Because W and H are saved internally, you can always re-run SolveNMF (with lower tolerance) without changing maxiters.
+
+
     How to Install
     ----------
     I recommend using pip to install the code:
