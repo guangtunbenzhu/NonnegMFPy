@@ -8,11 +8,14 @@ Vectorized Nonnegative Matrix Factorization with heteroscedastic uncertainties a
     ----------
 
     NonnegMFPy is developed and maintained by Guangtun Ben Zhu, 
-    It is designed to solve nonnegative matrix factorization (NMF) given a dataset with heteroscedastic 
-    uncertainties and missing data with a vectorized multiplicative update rule (Zhu 2016).
-    The un-vectorized (i.e., indexed) update rule for NMF without uncertainties or missing data was
-    originally developed by Lee & Seung (2000), and the un-vectorized update rule for NMF
-    with uncertainties or missing data was originally developed by Blanton & Roweis (2007).
+    It is designed to solve nonnegative matrix factorization (NMF) given a dataset with 
+    heteroscedastic uncertainties and missing data with a vectorized multiplicative 
+    update rule (Zhu 2016).
+
+    The un-vectorized (i.e., indexed) update rule for NMF without uncertainties or 
+    missing data was originally developed by Lee & Seung (2000), and the un-vectorized 
+    update rule for NMF with uncertainties or missing data was originally developed 
+    by Blanton & Roweis (2007).
 
     As all the codes, this code can always be improved and any feedback will be greatly appreciated.
 
@@ -52,7 +55,7 @@ Vectorized Nonnegative Matrix Factorization with heteroscedastic uncertainties a
 
          to get the other matrix (H in this case).
 
-      -- It has sparse mode. However, I found only when the matrix (M or V) is extremely sparse (>90%),
+      -- It has sparse mode. However, I found unless the matrix (M or V) is extremely sparse (>90%),
          the speed-up is limited. The overhead of creating the intermediate sparse matrices is small though.
          I haven't made the decision whether the sparse mode should be default.
 
@@ -62,7 +65,15 @@ Vectorized Nonnegative Matrix Factorization with heteroscedastic uncertainties a
 
          >> chi2_red, time_used = g.SolveNMF(maxiters=5000, tol=1E-7)
 
-         Because W and H are saved internally, you can always re-run SolveNMF (with lower tolerance) without changing maxiters.
+         Because W and H are saved internally, you can always re-run SolveNMF (with lower tolerance) 
+         without changing maxiters.
+
+      -- If the data (for each instance) has multiple dimensions, you can simply flatten them to 1D,
+         e.g., if X.shape = (n_instance, D1, D2)
+
+         >> new_X = X.reshape(n_instance, D1*D2)
+
+         And the code can then work on new_X.
 
 
     How to Install

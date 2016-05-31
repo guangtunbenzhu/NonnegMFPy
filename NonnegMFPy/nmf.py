@@ -102,8 +102,6 @@ class NMF:
 
     Optional Input/Output: 
       -- n_components: desired size of the basis set, default 5
-      -- tol: convergence criterion, default 1E-5
-      -- maxiters: allowed maximum number of iterations, default 1000
 
       -- V: m x n matrix, the weight, (usually) the inverse variance
       -- M: m x n binary matrix, the mask, False means missing/undesired data
@@ -237,6 +235,7 @@ class NMF:
             -- W_only: Only update W, assuming H is known
             -- H_only: Only update H, assuming W is known
                -- Only one of them can be set
+
         Optional Input:
             -- tol: convergence criterion, default 1E-5
             -- maxiters: allowed maximum number of iterations, default 1000
@@ -283,9 +282,6 @@ class NMF:
 
             # Update H
             if (not W_only):
-                #H_up = np.dot(self.W.T, XV)
-                #H_down = np.dot(self.W.T, np.dot(self.W, self.H)*self.V)
-
                 H_up = dot(XVT, self.W)
                 WHVT = multiply(VT, np.dot(self.W, self.H).T)
                 H_down = dot(WHVT, self.W)
@@ -293,9 +289,6 @@ class NMF:
 
             # Update W
             if (not H_only):
-                #W_up = np.dot(XV, self.H.T)
-                #W_down = np.dot(np.dot(self.W, self.H)*self.V, self.H.T)
-
                 W_up = dot(XV, self.H.T)
                 WHV = multiply(V, np.dot(self.W, self.H))
                 W_down = dot(WHV, self.H.T)
