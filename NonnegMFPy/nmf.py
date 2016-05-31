@@ -248,12 +248,12 @@ class NMF:
         t0 = time()
 
 
-        if (W_only and H_only):
-            print("Both W_only and H_only are set to be True. Return ...", flush=True)
-            return (chi2, time_used)
-
         chi2 = self.cost
         oldchi2 = _largenumber
+
+        if (W_only and H_only):
+            print("Both W_only and H_only are set to be True. Returning ...", flush=True)
+            return (chi2, 0.)
 
         XV = self.X*self.V
 
