@@ -26,6 +26,15 @@ Vectorized Nonnegative Matrix Factorization with heteroscedastic uncertainties a
       -- Everything needs to be non-negative
 
     Here are some small tips for using this code:
+
+      -- The code can work on multi-dimensional data, such as images, you only need to flatten them to 1D first, 
+         e.g., if X.shape = (n_instance, D1, D2)
+
+         >> new_X = X.reshape(n_instance, D1*D2)
+
+         And the code can then work on new_X.
+
+
       -- The algorithm can handle heteroscedastic uncertainties and missing data.
          You can supply the weight (V) and the mask (M) at the instantiation:
 
@@ -68,13 +77,6 @@ Vectorized Nonnegative Matrix Factorization with heteroscedastic uncertainties a
          Because W and H are saved internally, you can always re-run SolveNMF (with lower tolerance) 
          without changing maxiters.
 
-      -- If the data (for each instance) has multiple dimensions, you can simply flatten them to 1D,
-         e.g., if X.shape = (n_instance, D1, D2)
-
-         >> new_X = X.reshape(n_instance, D1*D2)
-
-         And the code can then work on new_X.
-
 
     How to Install
     ----------
@@ -91,7 +93,8 @@ Vectorized Nonnegative Matrix Factorization with heteroscedastic uncertainties a
     One can use the following dataset as a test:
       http://www.pha.jhu.edu/~gz323/scp/Data/ExtragalacticTest/
     
-    The Extragalatic_Archetype_testsample_spec.fits includes spectra (spec: 2760x2820) for 2820 extragalactic sources with 2760 wavelengths 
+    The Extragalatic_Archetype_testsample_spec.fits includes spectra (spec: 2760x2820) 
+    for 2820 extragalactic sources with 2760 wavelengths 
     and the inverse variance (ivar). 
 
 
@@ -127,7 +130,8 @@ Vectorized Nonnegative Matrix Factorization with heteroscedastic uncertainties a
 Dependencies
 =============
     Python >3.5.1
-    Numpy >1.11.0
+    NumPy >1.11.0
+    SciPy >0.17.0 (for sparse matrices)
 
     I did not fully test the code on earlier versions.
 
