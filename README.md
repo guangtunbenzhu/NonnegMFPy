@@ -91,7 +91,8 @@ Vectorized Nonnegative Matrix Factorization with heteroscedastic uncertainties a
     ----------
     
     One can use the following dataset as a test:
-      http://www.pha.jhu.edu/~gz323/scp/Data/ExtragalacticTest/
+      https://s3.us-east-2.amazonaws.com/setcoverproblem/ExtragalacticTest/Extragalatic_Archetype_testsample_spec.fits
+      https://s3.us-east-2.amazonaws.com/setcoverproblem/ExtragalacticTest/Extragalatic_Archetype_testsample.fits
     
     The Extragalatic_Archetype_testsample_spec.fits includes spectra (spec: 2760x2820) 
     for 2820 extragalactic sources with 2760 wavelengths 
