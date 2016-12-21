@@ -10,12 +10,16 @@ Vectorized Nonnegative Matrix Factorization with heteroscedastic uncertainties a
     NonnegMFPy is developed and maintained by Guangtun Ben Zhu, 
     It is designed to solve nonnegative matrix factorization (NMF) given a dataset with 
     heteroscedastic uncertainties and missing data with a vectorized multiplicative 
-    update rule (Zhu 2016).
+    update rule (Zhu 2016):
+    https://arxiv.org/abs/1612.06037
 
     The un-vectorized (i.e., indexed) update rule for NMF without uncertainties or 
-    missing data was originally developed by Lee & Seung (2000), and the un-vectorized 
+    missing data was originally developed by Lee & Seung (2001), and the un-vectorized 
     update rule for NMF with uncertainties or missing data was originally developed 
     by Blanton & Roweis (2007).
+    Lee & Seung (2001): https://papers.nips.cc/paper/1861-algorithms-for-non-negative-matrix-factorization.pdf
+    Blanton & Roweis (2007): http://adsabs.harvard.edu/abs/2007AJ....133..734B
+    Blondel (2008): https://www.researchgate.net/profile/Paul_Van_Dooren/publication/253588948_Weighted_Nonnegative_Matrix_Factorization_and_Face_Feature_Extraction/links/00463529d128a02565000000.pdf
 
     As all the codes, this code can always be improved and any feedback will be greatly appreciated.
 
