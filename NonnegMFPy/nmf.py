@@ -107,9 +107,8 @@ class NMF:
       -- M: m x n binary matrix, the mask, False means missing/undesired data
       -- H: n_components x n matrix, the H matrix, usually interpreted as the coefficients
       -- W: m x n_components matrix, the W matrix, usually interpreted as the basis set
-
-    (Use A.4 instance from Beasley's OR library,
-     http://people.brunel.ac.uk/~mastjjb/jeb/orlib/scpinfo.html, as an example)
+    
+    (See README for how to retrieve the test data)
     
     Construct a new basis set with 12 components
     Instantiation: 
