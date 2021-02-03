@@ -309,8 +309,8 @@ class NMF:
         if (niter == self.maxiters):
             print("Iteration in re-initialization reaches maximum number = {0}".format(niter), flush=True)
 
+        time_used = (time()-t0)/60.
         if verbose == True:
-            time_used = (time()-t0)/60.
             print("Took {0:.3f} minutes to reach current solution.".format(time_used), flush=True)
 
         return (chi2, time_used)
