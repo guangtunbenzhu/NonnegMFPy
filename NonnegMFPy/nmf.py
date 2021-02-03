@@ -226,7 +226,7 @@ class NMF:
         chi2 = np.einsum('ij,ij', self.V*diff, diff)/self.V_size
         return chi2
 
-    def SolveNMF(self, W_only=False, H_only=False, sparsemode=False, maxiters=None, tol=None):
+    def SolveNMF(self, W_only=False, H_only=False, sparsemode=False, maxiters=None, tol=None, verbose=False):
         """
         Construct the NMF basis
 
@@ -238,7 +238,7 @@ class NMF:
         Optional Input:
             -- tol: convergence criterion, default 1E-5
             -- maxiters: allowed maximum number of iterations, default 1000
-
+            -- verbose: Turn on extra output printing [False]
         Output: 
             -- chi2: reduced final cost
             -- time_used: time used in this run
@@ -301,15 +301,17 @@ class NMF:
             if (not np.isfinite(chi2)):
                raise ValueError("NMF construction failed, likely due to missing data")
 
-            if (np.mod(niter, 20)==0):
+            # print output updates
+            if ((verbose == True) and (np.mod(niter, 20)==0)):
                 print("Current Chi2={0:.4f}, Previous Chi2={1:.4f}, Change={2:.4f}% @ niters={3}".format(chi2,oldchi2,(oldchi2-chi2)/oldchi2*100.,niter), flush=True)
 
             niter += 1
-            if (niter == self.maxiters):
-                print("Iteration in re-initialization reaches maximum number = {0}".format(niter), flush=True)
+        if (niter == self.maxiters):
+            print("Iteration in re-initialization reaches maximum number = {0}".format(niter), flush=True)
 
         time_used = (time()-t0)/60.
-        print("Took {0:.3f} minutes to reach current solution.".format(time_used), flush=True)
+        if verbose == True:
+            print("Took {0:.3f} minutes to reach current solution.".format(time_used), flush=True)
 
         return (chi2, time_used)
 
